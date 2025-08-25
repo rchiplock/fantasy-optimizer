@@ -36,7 +36,7 @@ This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 
 
 ### **Step 1: Get the App Files**
-1. Go to [THIS GitHub Repo](https://github.com/YOUR_USERNAME/fantasy-optimizer).
+1. Go to [THIS GitHub Repo](https://github.com/rchiplock/fantasy-optimizer).
 2. Click the green **“Code”** button → choose **Download ZIP**.
 3. Extract the ZIP to a folder (example: `Desktop/fantasy-optimizer`).
 
