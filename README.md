@@ -88,7 +88,10 @@ Run this command:
 ```
 streamlit run fantasy_optimizer_pro_v2.py
 ```
-
+If that **doesn't work** (you see "'streamlit is not recognized"), use:
+```
+python -m streamlit run fantasy_optimizer_pro_v2.py
+```
 
 ✔ This will open the app in your browser at:
 ```
