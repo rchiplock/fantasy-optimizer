@@ -86,7 +86,7 @@ pip install -r requirements.txt
 ### **Step 6: Run the App**
 Run this command:
 ```
-streamlit run app.py
+streamlit run fantasy_optimizer_pro_v2.py
 ```
 
 
