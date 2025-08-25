@@ -1,0 +1,10 @@
+# Ignore local Yahoo OAuth
+oauth2.json
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+env/
