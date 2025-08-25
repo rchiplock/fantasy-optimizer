@@ -1,6 +1,9 @@
 # Ignore local Yahoo OAuth
 oauth2.json
 
+# Ignore authentication script
+auth.py
+
 # Python cache
 __pycache__/
 *.pyc
