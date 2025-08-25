@@ -100,7 +100,7 @@ def calc_multiplier(row):
 # ------------------------------
 # APP UI
 # ------------------------------
-st.title("🏈 Yahoo DFS Optimizer + Advanced Vegas Logic")
+st.title("🏈 DFS Optimizer + Game Flow Logic")
 
 
 # Sidebar controls
@@ -111,9 +111,9 @@ threshold = st.sidebar.slider("Fuzzy Match Threshold", 50, 95, 80)
 salary_file = st.file_uploader("Upload Salary CSV (DK or FD)", type="csv")
 mapping_file = st.file_uploader("Optional: Upload Name Mapping CSV", type="csv")
 num_lineups = st.sidebar.number_input("Number of Lineups", 1, 20, 3)
-max_exposure = st.sidebar.slider("Max Player Exposure %", 10, 100, 50)
+max_exposure = st.sidebar.slider("Max Player Ownership %", 10, 100, 50)
 min_uniqueness = st.sidebar.slider("Minimum unique players per lineup", 1, 5, 1)
-stack_qb_wr = st.sidebar.checkbox("Require QB-WR stack?", value=False)
+stack_qb_wr = st.sidebar.checkbox("Enable QB-WR stack?", value=False)
 relax_constraints = st.sidebar.checkbox("Relax position constraints if pool is small?", value=True)
 
 
