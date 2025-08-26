@@ -1,7 +1,8 @@
-# 🏈 Fantasy Optimizer
+# 🏈 DFS Fantasy Football Optimizer
 
 
 This app helps you **build optimal lineups for DraftKings or FanDuel** using:
+
 ✔ Yahoo Fantasy Projections  
 ✔ Vegas odds (game totals & spreads)  
 ✔ Smart lineup constraints (**stacking, exposure limits, uniqueness**)  
@@ -19,7 +20,7 @@ This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 
 2. **A Yahoo account**
    - Create/login at [Yahoo Fantasy](https://sports.yahoo.com/fantasy/)
-
+  
 
 3. **An Odds API Key**
    - Sign up at [The Odds API](https://the-odds-api.com)
@@ -105,7 +106,7 @@ http://localhost:8501
 ### **Step 7: Use the App**
 - Enter your Yahoo League ID (from your league URL, e.g., `1168764`).
 - Enter your Odds API key.
-- Upload your **salaries CSV** from DraftKings or FanDuel.
+- Upload your **salaries CSV** from DraftKings or FanDuel (See Below).
 - Click **Run Optimizer** → Download your optimal lineups! 🎉
 
 
@@ -116,6 +117,25 @@ http://localhost:8501
 - **Offseason?** Yahoo projections will show **0** (that’s normal).
 - Your Yahoo tokens auto-refresh; no need to log in again unless they expire.
 - All data stays **on your machine**; nothing is uploaded to a server.
+- No active Yahoo fantasy football league? 
+
+
+---
+
+
+## ✅ Retrieving Salary Files
+- Login to your Draftkings or FanDuel account
+- Select a **Classic** (Draftkings) or **Full Roster** (FanDuel) NFL contest
+- Click on **Draft Team** (Draftkings) or **Enter new lineup** (FanDuel)
+- Click the link to download the player list (salary file):
+- Draftkings:
+  <img width="2525" height="1521" alt="Draftkings Salary File Download" src="https://github.com/user-attachments/assets/4a326409-920b-4744-9631-443e2775d654" />
+- FanDuel:
+  <img width="3550" height="1555" alt="FanDuel Salary File Download" src="https://github.com/user-attachments/assets/8776ddbd-0447-4ab7-883d-c79b6d4c2982" />
+- Save the file as a .CSV file with the source name included
+-    **Draftkings example**: draftkings week 1 salary.csv
+-    **FanDuel example**: fanduel week 1 salary.csv
+- These are now ready to upload into the app.
 
 
 ---
@@ -151,6 +171,7 @@ http://localhost:8501
 
 ✅ That’s it! No code editing, just follow these instructions:
 - Download → Install → Login → Run → Optimize ✅
+
 
 
 
