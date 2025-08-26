@@ -189,4 +189,13 @@ Your support helps keep this project alive and updated. Thank you! 🙌
 ---
 
 
+### ✅Official Links and Trust Notice
+The **ONLY** official donation link for this project is the one above or linked from this GitHub repository.
+If you find this app elsewhere with different donation links, please ignore them - they are **not official**.
+
+Check the latest version and details here:
+**[https://github.com/rchiplock/fantasy-optimizer](https://github.com/rchiplock/fantasy-optimizer)**
+
+
+---
 
