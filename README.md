@@ -133,7 +133,7 @@ http://localhost:8501
 - FanDuel:
   <img width="3550" height="1555" alt="FanDuel Salary File Download" src="https://github.com/user-attachments/assets/8776ddbd-0447-4ab7-883d-c79b6d4c2982" />
 - Save the file as a .CSV file with the source name included
--    **Draftkings example**: draftkings week 1 salary.csv
+-    **Draftkings example**: draftkings week 1 salary.csv (must have 'draftkings' or 'dk' in file name to detect correct salary constraints)
 -    **FanDuel example**: fanduel week 1 salary.csv
 - These are now ready to upload into the app.
 
@@ -198,4 +198,5 @@ Check the latest version and details here:
 
 
 ---
+
 
