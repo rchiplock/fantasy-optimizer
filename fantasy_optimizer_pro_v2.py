@@ -143,7 +143,7 @@ if salary_file and st.sidebar.button("Run Optimizer"):
 
     salaries['pos'] = salaries['pos'].str.upper().replace({'D/ST':'DST','D':'DST'})
     defense_mask = salaries['pos'] == 'DST'
-    salaries.loc[defense_mask, 'name'] = salaries.loc[defense_mask, 'name'].str.replace(r'\s*DST$', '', regex=True)
+    salaries.loc[defense_mask, 'name'] = salaries.loc[defense_mask, 'name'].str.replace(r'\s*DST.*$', '', regex=True)
 
 
     salaries['name_norm'] = salaries['name'].apply(normalize_name)
@@ -156,13 +156,22 @@ if salary_file and st.sidebar.button("Run Optimizer"):
     st.write(f"✅ Loaded {len(salaries)} salary rows. Salary Cap = {salary_cap}")
 
 
-    # Fetch Yahoo projections
-    league_key = build_league_key(league_id)
+    # ✅ Fetch Yahoo projections (UPDATED)
     with st.spinner("Fetching Yahoo projections..."):
-        projections = get_weekly_projections(league_key, week)
+        projections = get_weekly_projections(week)  # <-- CHANGED: Removed league_key param
+
+
     projections['name_norm'] = projections['full_name'].apply(normalize_name)
     projections = projections.drop_duplicates(subset=['name_norm'], keep='first')
     st.write(f"✅ Yahoo Projections fetched: {len(projections)} players")
+
+
+    # OPTIONAL: Show top 10 projections for sanity check
+    if not projections.empty and {'full_name','pos','projection'}.issubset(projections.columns):
+        st.subheader("📊 Top 10 Yahoo Projections (Fan Pts)")
+        st.table(projections[['full_name', 'pos', 'projection']].head(10))
+    else:
+        st.warning("No projections available or missing expected columns.")
 
 
     # Apply optional mapping
@@ -278,8 +287,8 @@ if salary_file and st.sidebar.button("Run Optimizer"):
         out=pd.concat(lineups,keys=[f"Lineup_{i+1}" for i in range(len(lineups))])
         st.download_button("⬇ Download Lineups", out.to_csv(index=False), "optimized_lineups.csv")
     else:
-
         st.error("No valid lineups generated even after relaxing constraints.")
+
 
 st.write("---")
 st.markdown(
@@ -288,3 +297,4 @@ st.markdown(
     Visit the [official GitHub repo](https://github.com/rchiplock/fantasy-optimizer) for updates and ways to support!
     """
 )
+
