@@ -166,12 +166,27 @@ http://localhost:8501
 ---
 
 
----
-
-
 ✅ That’s it! No code editing, just follow these instructions:
 - Download → Install → Login → Run → Optimize ✅
 
+
+---
+
+
+## 💸 Support This Project
+
+
+This app is 100% free and open source, built for fun to help optimize your DFS lineups.  
+If it helped you build better lineups (or even hit a big win 🏆), consider supporting the project!
+
+
+👉 **[Buy Me a Coffee ☕](https://www.buymeacoffee.com/rchiplock)**  
+
+
+Your support helps keep this project alive and updated. Thank you! 🙌  
+
+
+---
 
 
 
