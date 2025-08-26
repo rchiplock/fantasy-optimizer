@@ -100,7 +100,7 @@ def calc_multiplier(row):
 # ------------------------------
 # APP UI
 # ------------------------------
-st.title("🏈 DFS Optimizer + Game Flow Logic")
+st.title("🏈 DFS Optimizer")
 
 
 # Sidebar controls
@@ -278,4 +278,13 @@ if salary_file and st.sidebar.button("Run Optimizer"):
         out=pd.concat(lineups,keys=[f"Lineup_{i+1}" for i in range(len(lineups))])
         st.download_button("⬇ Download Lineups", out.to_csv(index=False), "optimized_lineups.csv")
     else:
+
         st.error("No valid lineups generated even after relaxing constraints.")
+
+st.write("---")
+st.markdown(
+    """
+    Enjoying the App?
+    Visit the [official GitHub repo](https://github.com/rchiplock/fantasy-optimizer) for updates and ways to support!
+    """
+)
