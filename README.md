@@ -156,7 +156,7 @@ http://localhost:8501
 ## ✅ Features at a Glance
 ✔ Supports DraftKings & FanDuel salary files  
 ✔ Yahoo Fantasy integration  
-✔ Advanced Vegas logic (boost RB in blowouts, downgrade DST in shootouts)  
+✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts)  
 ✔ Lineup constraints:
 - Max exposure  
 - Min uniqueness  
@@ -189,7 +189,7 @@ Your support helps keep this project alive and updated. Thank you! 🙌
 ---
 
 
-### ✅Official Links and Trust Notice
+### ✅ Official Links and Trust Notice
 The **ONLY** official donation link for this project is the one above or linked from this GitHub repository.
 If you find this app elsewhere with different donation links, please ignore them - they are **not official**.
 
@@ -198,5 +198,6 @@ Check the latest version and details here:
 
 
 ---
+
 
 
