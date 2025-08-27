@@ -4,8 +4,11 @@
 This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 
 ✔ Yahoo Fantasy Projections with fallback to **FantasyPros** 
+
 ✔ Vegas odds (game totals & spreads with dynamic control)  
+
 ✔ Smart lineup constraints (**stacking, uniqueness**)
+
 ✔ Live user-controlled Vegas impact sliders  
 
 
@@ -158,9 +161,12 @@ http://localhost:8501
 
 
 ## ✅ Features at a Glance
-✔ Supports DraftKings & FanDuel salary files  
+✔ Supports DraftKings & FanDuel salary files 
+
 ✔ Yahoo or FantasyPros (fallback) Projections 
+
 ✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts)  
+
 ✔ Lineup constraints:  
 - Min uniqueness  
 - Optional QB-WR stacking  
@@ -201,6 +207,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
