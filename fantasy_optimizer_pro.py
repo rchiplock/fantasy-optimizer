@@ -147,24 +147,24 @@ def calc_multiplier(row, spread_trigger, total_trigger, impact_pct):
 # ------------------------------
 # Streamlit UI
 # ------------------------------
-st.title("🏈 DFS Optimizer v5 (Yahoo + FP + Dynamic Vegas Multipliers)")
+st.title("🏈 DFS Optimizer Pro")
 
 
-league_id=st.sidebar.text_input("Yahoo League ID","1168764")
-week=st.sidebar.number_input("Week",1,18,1)
-num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3)
-api_key=st.sidebar.text_input("Odds API Key",value=DEFAULT_API_KEY)
-min_uniqueness=st.sidebar.slider("Min unique players per lineup",1,5,1)
-stack_qb_wr=st.sidebar.checkbox("Enable QB-WR stack?",value=False)
-opt_mode=st.sidebar.radio("Optimize For:",["Median","Ceiling","Floor"])
-rand_pct=st.sidebar.slider("Projection randomness % (GPP)",0,30,0)
-min_proj=st.sidebar.slider("Minimum Projection (FPTS)",0.0,30.0,1.0)
+league_id=st.sidebar.text_input("Yahoo League ID","1168764",help="Your Yahoo league number (from the URL). Needed for projections")
+week=st.sidebar.number_input("Week",1,18,1,help="Which NFL week to optimize for")
+num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3,help="How many lineups should the optimizer build?")
+api_key=st.sidebar.text_input("Odds API Key",value=DEFAULT_API_KEY,help="API key from The Odds API for game totals & spreads")
+min_uniqueness=st.sidebar.slider("Min unique players per lineup",1,5,1,help="Force variety: Each lineup must differ by this many players")
+stack_qb_wr=st.sidebar.checkbox("Enable QB-WR stack?",value=False,help="Keep it classic: Pair QB with at least one WR from the same team")
+opt_mode=st.sidebar.radio("Optimize For:",["Median","Ceiling","Floor"],help="Median = safe. Ceiling = upside. Floor = low risk.")
+rand_pct=st.sidebar.slider("Projection randomness % (GPP)",0,30,0,help="Add variance for GPP - more randomness = more unique lineups")
+min_proj=st.sidebar.slider("Minimum Projection (FPTS)",0.0,30.0,1.0,help="Ignore players projected below this score")
 
 
 # ✅ New Vegas sliders
-spread_trigger=st.sidebar.slider("Spread trigger (pts)",1,10,3,help="Spread beyond which adjustments apply")
-total_trigger=st.sidebar.slider("Over/Under trigger",40,60,47,help="Games above this OU boost WR/TE")
-impact_pct=st.sidebar.slider("Vegas impact intensity (%)",0,20,5,help="Increase in multiplier per trigger")
+spread_trigger=st.sidebar.slider("Spread trigger (pts)",1,10,3,help="Start adjusting the multipliers when point spread meets this value")
+total_trigger=st.sidebar.slider("Over/Under trigger",30,60,45,help="Games above this OU boost WR/TE (and adjust DST)")
+impact_pct=st.sidebar.slider("Vegas impact intensity (%)",0,20,5,help="How strong Vegas influence is on player projections")
 
 
 salary_file=st.file_uploader("Upload Salary CSV (DK or FD)", type="csv")
@@ -293,3 +293,4 @@ if salary_file and st.sidebar.button("Run Optimizer"):
 
 st.write("---")
 st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer)")
+
