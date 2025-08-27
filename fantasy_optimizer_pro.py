@@ -284,7 +284,7 @@ if salary_file and st.sidebar.button("Run Optimizer"):
         for i,lu in enumerate(lineups):
             st.subheader(f"Lineup #{i+1}")
             st.table(lu)
-            st.write(f"Salary: {lu['salary'].sum()} | Proj: {lu['projection'].sum():.2f}")
+            st.write(f"Salary: {lu['salary'].sum()} | Proj: {lu['projection'].sum():.2f} | Adjusted Total: {lu['final_score'].sum():.2f}")
         out=pd.concat(lineups,keys=[f"Lineup_{i+1}"for i in range(len(lineups))])
         st.download_button("⬇ Download CSV",out.to_csv(index=False),"optimized_lineups.csv")
     else:
