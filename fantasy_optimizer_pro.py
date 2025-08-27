@@ -293,4 +293,3 @@ if salary_file and st.sidebar.button("Run Optimizer"):
 
 st.write("---")
 st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer)")
-
