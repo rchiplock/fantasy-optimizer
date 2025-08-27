@@ -149,7 +149,6 @@ def calc_multiplier(row, spread_trigger, total_trigger, impact_pct):
 # ------------------------------
 st.title("🏈 DFS Optimizer Pro")
 
-
 league_id=st.sidebar.text_input("Yahoo League ID","1168764",help="Your Yahoo league number (from the URL). Needed for projections")
 week=st.sidebar.number_input("Week",1,18,1,help="Which NFL week to optimize for")
 num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3,help="How many lineups should the optimizer build?")
@@ -170,7 +169,20 @@ impact_pct=st.sidebar.slider("Vegas impact intensity (%)",0,20,5,help="How stron
 salary_file=st.file_uploader("Upload Salary CSV (DK or FD)", type="csv")
 
 
-if salary_file and st.sidebar.button("Run Optimizer"):
+# ✅ State control flag for persistent optimizer UI
+if 'optimizer_started' not in st.session_state:
+    st.session_state.optimizer_started = False
+
+
+if salary_file and not st.session_state.optimizer_started:
+    if st.sidebar.button("Run Optimizer"):
+        st.session_state.optimizer_started = True
+
+
+# ------------------------------
+# Main logic
+# ------------------------------
+if st.session_state.optimizer_started and salary_file:
     filename=salary_file.name.lower()
     platform='DraftKings' if 'draftkings' in filename or 'dk' in filename else 'FanDuel'
     salary_cap=50000 if platform=='DraftKings' else 60000
@@ -207,36 +219,90 @@ if salary_file and st.sidebar.button("Run Optimizer"):
     st.success(f"Using projections: {using}")
 
 
-    salaries['matched_name']=None
-    names=list(yahoo_df['name_norm'])
-    for idx,row in salaries.iterrows():
-        match,score=process.extractOne(row['name_norm'],names)
-        if match and score>=FUZZY_THRESHOLD: 
-            salaries.at[idx,'matched_name']=match
+    salaries['matched_name'] = None
+    names = list(yahoo_df['name_norm'])
+    unmatched_rows = []
 
 
-    merged=salaries.merge(yahoo_df,left_on='matched_name',right_on='name_norm',how='left')
-    merged['pos']=merged['pos_x'].combine_first(merged.get('pos_y'))
-    merged['salary']=pd.to_numeric(merged['salary'],errors='coerce')
-    merged=merged.dropna(subset=['projection','salary'])
-    if 'name_x' in merged.columns: merged.rename(columns={'name_x':'name'},inplace=True)
-    if 'name_y' in merged.columns: merged.drop(columns=['name_y'],inplace=True)
+    for idx, row in salaries.iterrows():
+        match, score = process.extractOne(row['name_norm'], names)
+        if match and score >= FUZZY_THRESHOLD:
+            candidate = yahoo_df[yahoo_df['name_norm'] == match].iloc[0]
+            if str(candidate['pos']).upper() == str(row['pos']).upper():
+                salaries.at[idx, 'matched_name'] = match
+            else:
+                same_pos = yahoo_df[yahoo_df['pos'].str.upper() == str(row['pos']).upper()]
+                if not same_pos.empty:
+                    alt_match, alt_score = process.extractOne(row['name_norm'], list(same_pos['name_norm']))
+                    if alt_match and alt_score >= FUZZY_THRESHOLD:
+                        salaries.at[idx, 'matched_name'] = alt_match
+                    else:
+                        unmatched_rows.append(row)
+                else:
+                    unmatched_rows.append(row)
+        else:
+            unmatched_rows.append(row)
 
 
-    merged['team_abbr']=merged.get('team_abbr_x','').str.upper()
-    final=merged[merged['projection']>=min_proj].copy()
-    vegas=fetch_vegas_odds(api_key)
-    final=final.merge(vegas,on='team_abbr',how='left')
+    merged = salaries.merge(yahoo_df, left_on='matched_name', right_on='name_norm', how='left')
 
 
-    st.write("Vegas merge sample:", final[['name','team_abbr','spread','total']].head(10))
+    # ✅ Interactive Mapping with Session Persistence
+    if 'corrected_matches' not in st.session_state:
+        st.session_state.corrected_matches = {}
 
 
-    final['multiplier']=final.apply(lambda r: calc_multiplier(r,spread_trigger,total_trigger,impact_pct),axis=1)
-    final['final_score']=final['projection']*final['multiplier']
-    if opt_mode=="Ceiling": final['final_score']*=1.1
-    elif opt_mode=="Floor": final['final_score']*=0.9
-    if rand_pct>0: final['final_score']*=np.random.normal(1,rand_pct/100,len(final))
+    if unmatched_rows:
+        st.warning(f"{len(unmatched_rows)} players could not be matched. Showing top 50 by salary. Please map those you'd like to include in projections below:")
+        unmatched_df = pd.DataFrame(unmatched_rows)
+        # Sort by salary and keep only top 25
+        unmatched_df['salary'] = pd.to_numeric(unmatched_df.get('salary',0),errors='coerce').fillna(0)
+        unmatched_df = unmatched_df.sort_values(by='salary', ascending=False).head(50)
+        display_col = 'full_name' if 'full_name' in yahoo_df.columns else 'name'
+
+
+        for i, r in unmatched_df.iterrows():
+            candidates = yahoo_df[yahoo_df['pos'].str.upper() == str(r['pos']).upper()][display_col].dropna().tolist()
+            current_value = st.session_state.corrected_matches.get(r['name_norm'], "-- No Match --")
+            selected = st.selectbox(
+                f"Match for {r['name']}",
+                ["-- No Match --"] + candidates,
+                index=(["-- No Match --"] + candidates).index(current_value) if current_value in candidates else 0,
+                key=f"map_{i}"
+            )
+            if selected != "-- No Match --":
+                st.session_state.corrected_matches[r['name_norm']] = normalize_name(selected)
+
+
+    if st.session_state.corrected_matches:
+        st.success(f"{len(st.session_state.corrected_matches)} manual matches selected. Applying...")
+        for idx, row in salaries.iterrows():
+            if row['name_norm'] in st.session_state.corrected_matches:
+                salaries.at[idx, 'matched_name'] = st.session_state.corrected_matches[row['name_norm']]
+
+
+        merged = salaries.merge(yahoo_df, left_on='matched_name', right_on='name_norm', how='left')
+
+
+    # ------------------- Continue -------------------
+    merged['pos'] = merged['pos_x'].combine_first(merged.get('pos_y'))
+    merged['salary'] = pd.to_numeric(merged['salary'], errors='coerce')
+    merged = merged.dropna(subset=['projection', 'salary'])
+    if 'name_x' in merged.columns: merged.rename(columns={'name_x': 'name'}, inplace=True)
+    if 'name_y' in merged.columns: merged.drop(columns=['name_y'], inplace=True)
+
+
+    merged['team_abbr'] = merged.get('team_abbr_x', '').str.upper()
+    final = merged[merged['projection'] >= min_proj].copy()
+    vegas = fetch_vegas_odds(api_key)
+    final = final.merge(vegas, on='team_abbr', how='left')
+
+
+    final['multiplier'] = final.apply(lambda r: calc_multiplier(r, spread_trigger, total_trigger, impact_pct), axis=1)
+    final['final_score'] = final['projection'] * final['multiplier']
+    if opt_mode == "Ceiling": final['final_score'] *= 1.1
+    elif opt_mode == "Floor": final['final_score'] *= 0.9
+    if rand_pct > 0: final['final_score'] *= np.random.normal(1, rand_pct/100, len(final))
 
 
     st.subheader("Top 20 Players")
@@ -246,7 +312,6 @@ if salary_file and st.sidebar.button("Run Optimizer"):
     if 'DST' not in final['pos'].values: st.error("No DST found."); st.stop()
 
 
-    # -------- OPTIMIZER BUILD --------
     prev_sets=[]; lineups=[]; pool=final.index
     def build(prev):
         prob=LpProblem("DFS",LpMaximize)
@@ -292,4 +357,5 @@ if salary_file and st.sidebar.button("Run Optimizer"):
 
 
 st.write("---")
-st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer)")
+st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer) for the latest updates or to contribute!")
+
