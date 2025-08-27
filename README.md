@@ -168,6 +168,8 @@ http://localhost:8501
 ✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts) 
 - **Spread Trigger (pts)**: When does game script start to matter? Set the point spread size (favorite vs underdog) where adjustments kick in. **Example**: At 7 pts, favored RBs gain an edge; underdog WR/TEs see more volume
 
+- **Over/Under Trigger**: Games above this Over/Under threshold are considered shootouts and would boost WR/TE while slightly downgrading a DST. **Example**: At 47, WR/TE get a bump in high-scoring games; DST would get a small reduction
+
 - **Vegas Impact Intensity (%)**: How much weight do Vegas odds add to player projections? 0% = ignore Vegas, 20% = strong game-script adjustments for spreads/totals
 
 ✔ Lineup constraints:  
@@ -210,6 +212,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
