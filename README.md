@@ -165,7 +165,10 @@ http://localhost:8501
 
 ✔ Yahoo or FantasyPros (fallback) Projections 
 
-✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts)  
+✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts) 
+- **Spread Trigger (pts)**: When does game script start to matter? Set the point spread size (favorite vs underdog) where adjustments kick in. **Example**: At 7 pts, favored RBs gain an edge; underdog WR/TEs see more volume
+
+- **Vegas Impact Intensity (%)**: How much weight do Vegas odds add to player projections? 0% = ignore Vegas, 20% = strong game-script adjustments for spreads/totals
 
 ✔ Lineup constraints:  
 - Min uniqueness  
@@ -207,6 +210,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
