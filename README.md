@@ -3,9 +3,11 @@
 
 This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 
-✔ Yahoo Fantasy Projections  
-✔ Vegas odds (game totals & spreads)  
-✔ Smart lineup constraints (**stacking, exposure limits, uniqueness**)  
+✔ Yahoo Fantasy Projections with fallback to **FantasyPros** 
+✔ Vegas odds (game totals & spreads with dynamic control)  
+✔ Smart lineup constraints (**stacking, uniqueness**)
+✔ Live user-controlled Vegas impact sliders  
+
 
 
 ---
@@ -18,13 +20,16 @@ This app helps you **build optimal lineups for DraftKings or FanDuel** using:
    - Download from [python.org](https://www.python.org/downloads/)
 
 
-2. **A Yahoo account**
+2. **A Yahoo account** (for projections)
    - Create/login at [Yahoo Fantasy](https://sports.yahoo.com/fantasy/)
   
 
 3. **An Odds API Key**
    - Sign up at [The Odds API](https://the-odds-api.com)
    - Free tier = 500 calls/month (Plenty for personal use)
+  
+
+4. **DraftKings or FanDuel salary CSV**
 
 
 ---
@@ -87,11 +92,11 @@ pip install -r requirements.txt
 ### **Step 6: Run the App**
 Run this command:
 ```
-streamlit run fantasy_optimizer_pro_v2.py
+streamlit run fantasy_optimizer_pro.py
 ```
 If that **doesn't work** (you see "'streamlit is not recognized"), use:
 ```
-python -m streamlit run fantasy_optimizer_pro_v2.py
+python -m streamlit run fantasy_optimizer_pro.py
 ```
 
 ✔ This will open the app in your browser at:
@@ -117,7 +122,6 @@ http://localhost:8501
 - **Offseason?** Yahoo projections will show **0** (that’s normal).
 - Your Yahoo tokens auto-refresh; no need to log in again unless they expire.
 - All data stays **on your machine**; nothing is uploaded to a server.
-- No active Yahoo fantasy football league? 
 
 
 ---
@@ -155,10 +159,9 @@ http://localhost:8501
 
 ## ✅ Features at a Glance
 ✔ Supports DraftKings & FanDuel salary files  
-✔ Yahoo Fantasy integration  
+✔ Yahoo or FantasyPros (fallback) Projections 
 ✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts)  
-✔ Lineup constraints:
-- Max exposure  
+✔ Lineup constraints:  
 - Min uniqueness  
 - Optional QB-WR stacking  
 
@@ -198,6 +201,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
