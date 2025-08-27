@@ -2,18 +2,17 @@ import os
 import time
 import xml.etree.ElementTree as ET
 import pandas as pd
-import streamlit as st
 from yahoo_oauth import OAuth2
+import streamlit as st
 
 
-# -------------------------------------------------------
-# Yahoo OAuth Handling: Local OR Streamlit Secrets
-# -------------------------------------------------------
+# ------------------------------
+# OAuth Handling
+# ------------------------------
 def get_oauth():
     """
     Handles Yahoo OAuth authentication.
-    - Local mode: uses oauth2.json file.
-    - Streamlit Cloud: uses Streamlit secrets.
+    Tries local oauth2.json first, then Streamlit secrets.
     """
     if os.path.exists("oauth2.json"):
         oauth = OAuth2(None, None, from_file="oauth2.json")
@@ -22,18 +21,16 @@ def get_oauth():
         return oauth
 
 
-    # For Streamlit deployments
     if "oauth" not in st.secrets:
         st.error("Missing [oauth] configuration in Streamlit secrets.")
         st.stop()
 
 
     creds = st.secrets["oauth"]
-    required_keys = ["consumer_key", "consumer_secret", "access_token", "refresh_token"]
-    missing = [k for k in required_keys if k not in creds]
-    if missing:
-        st.error(f"Missing keys in [oauth] secrets: {missing}")
-        st.stop()
+    for key in ["consumer_key","consumer_secret","access_token","refresh_token"]:
+        if key not in creds:
+            st.error(f"Missing key in secrets: {key}")
+            st.stop()
 
 
     oauth = OAuth2(
@@ -45,9 +42,9 @@ def get_oauth():
     return oauth
 
 
-# -------------------------------------------------------
+# ------------------------------
 # Utility to strip XML namespaces
-# -------------------------------------------------------
+# ------------------------------
 def strip_namespace(root):
     for elem in root.iter():
         if "}" in elem.tag:
@@ -55,59 +52,59 @@ def strip_namespace(root):
     return root
 
 
-# -------------------------------------------------------
-# Get NFL game key dynamically
-# -------------------------------------------------------
-def get_current_nfl_game_key():
-    oauth = get_oauth()
+# ------------------------------
+# Get current NFL game key
+# ------------------------------
+def get_current_nfl_game_key(oauth):
     url = "https://fantasysports.yahooapis.com/fantasy/v2/game/nfl"
     resp = oauth.session.get(url)
-    if resp.status_code != 200:
-        return "461"  # fallback game key
-    try:
-        root = ET.fromstring(resp.text)
-        root = strip_namespace(root)
-        return root.find(".//game_key").text
-    except:
-        return "461"
+    root = ET.fromstring(resp.text)
+    root = strip_namespace(root)
+    return root.find(".//game_key").text
 
 
 def build_league_key(league_id):
-    game_key = get_current_nfl_game_key()
+    oauth = get_oauth()
+    game_key = get_current_nfl_game_key(oauth)
     return f"{game_key}.l.{league_id}"
 
 
-# -------------------------------------------------------
-# Fetch Yahoo projections using game-level endpoint
-# Will automatically work when Yahoo publishes stat id=900
-# -------------------------------------------------------
-def get_weekly_projections(week, page_size=25):
+# ------------------------------
+# Map Yahoo stat IDs to categories for DFS scoring
+# ------------------------------
+YAHOO_STAT_MAP = {
+    '4':  'pass_yds',   # Passing yards
+    '5':  'pass_td',    # Passing TD
+    '6':  'pass_int',   # Pass Interception
+    '15': 'rush_yds',   # Rushing yards
+    '16': 'rush_td',    # Rushing TD
+    '17': 'rec_yds',    # Receiving yards
+    '18': 'rec_td',     # Receiving TD
+    '19': 'fum_lost',   # Fumbles lost
+    '53': 'rec'         # Receptions
+}
+
+
+# ------------------------------
+# Fetch weekly raw projections (league context)
+# ------------------------------
+def get_weekly_raw_stats(league_id, week, page_size=25):
     """
-    Fetches projected Fan Points (stat id=900) for all NFL players
-    from the Yahoo Fantasy API game-level endpoint.
-
-
-    Parameters:
-        week (int): Week number for projections
-        page_size (int): Players per page (default: 25)
-
-
-    Returns:
-        DataFrame with columns: [full_name, pos, team_abbr, projection]
+    Fetches projected **raw stats** for all NFL players for a given week (league-based endpoint).
+    Returns DataFrame with:
+    [full_name, pos, team_abbr, pass_yds, pass_td, pass_int, rush_yds, rush_td, rec, rec_yds, rec_td, fum_lost]
     """
     oauth = get_oauth()
-    all_players = []
+    league_key = build_league_key(league_id)
+
+
+    all_rows = []
     start = 0
 
 
     while True:
-        url = (
-            f"https://fantasysports.yahooapis.com/fantasy/v2/game/nfl"
-            f"/players;status=A;type=week;week={week};statType=projected;"
-            f"start={start};count={page_size};out=stats"
-        )
-
-
+        url = (f"https://fantasysports.yahooapis.com/fantasy/v2/"
+               f"league/{league_key}/players;type=week;week={week};statType=projected;start={start};count={page_size}")
         resp = oauth.session.get(url)
         if resp.status_code != 200:
             st.error(f"Yahoo API error: {resp.text[:500]}")
@@ -134,35 +131,43 @@ def get_weekly_projections(week, page_size=25):
                 team_elem = p.find(".//editorial_team_abbr")
 
 
-                # Projected Fantasy Points (Fan Pts) is stat id=900
-                projection = 0.0
-                stat_elem = p.find('.//stat[@id="900"]')
-                if stat_elem is not None and stat_elem.text:
-                    projection = float(stat_elem.text)
+                full_name = name_elem.text.lower() if name_elem is not None else ""
+                pos = pos_elem.text.upper() if pos_elem is not None else ""
+                team = team_elem.text.upper() if team_elem is not None else ""
 
 
-                all_players.append({
-                    "full_name": name_elem.text.lower() if name_elem is not None else "",
-                    "pos": pos_elem.text.upper() if pos_elem is not None else "",
-                    "team_abbr": team_elem.text.upper() if team_elem is not None else "",
-                    "projection": projection
-                })
+                # Initialize stats dictionary with zeros
+                stats_dict = {v:0.0 for v in YAHOO_STAT_MAP.values()}
+
+
+                # Loop through projected stats
+                for s in p.findall(".//stat"):
+                    sid = s.findtext("stat_id")
+                    val = s.findtext("value")
+                    if sid in YAHOO_STAT_MAP and val is not None:
+                        try:
+                            stats_dict[YAHOO_STAT_MAP[sid]] = float(val)
+                        except:
+                            continue
+
+
+                row = {'full_name': full_name, 'pos': pos, 'team_abbr': team}
+                row.update(stats_dict)
+                all_rows.append(row)
+
+
             except Exception:
                 continue
 
 
-        # Pagination
         if len(players) < page_size:
             break
         start += page_size
         time.sleep(0.1)
 
 
-    df = pd.DataFrame(all_players)
+    df = pd.DataFrame(all_rows)
     if not df.empty:
-        df = df.sort_values(by="projection", ascending=False)
-        df = df.drop_duplicates(subset=["full_name"], keep="first").reset_index(drop=True)
-
-
+        df = df.drop_duplicates(subset=['full_name'])
     return df
 
