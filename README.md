@@ -33,7 +33,8 @@ Free at [The Odds API](https://the-odds-api.com/).
 ✅ **2. Salary CSV from DraftKings or FanDuel**  
 - DraftKings: Download from the contest page "Player List" link  
 - FanDuel: Download from the contest lobby  
-**File must include the source in the name (e.g., `draftkings-week1.csv` or `fanduel-week1.csv`)**  
+🖥️ 📱 **Follow Retrieving Salary Files instructions below**
+- **No need to rename downloaded file**, but file must include the source in the name (e.g., dk, draftkings, fanduel, fd)  
 
 
 ---
@@ -50,7 +51,7 @@ Free at [The Odds API](https://the-odds-api.com/).
 ---
 
 
-## ✅ Retrieving Salary Files
+## ✅ Retrieving Salary Files - 🖥️ Desktop
 - Login to your Draftkings or FanDuel account **on a browser** (cannot download player lists in the apps)
 
 [🏆 DraftKings](https://www.draftkings.com/home/contestlistbysport?sport=NFL)
@@ -71,7 +72,7 @@ Free at [The Odds API](https://the-odds-api.com/).
 
 ---
 
-## 📥 How to Download and Save a CSV on Your Phone
+## ✅ Retrieving Salary Files - 📱 Mobile
 
 
 Follow these quick steps to download a file and make sure it's ready to upload as a **CSV** on your mobile device:
@@ -84,13 +85,35 @@ Follow these quick steps to download a file and make sure it's ready to upload a
 
 
 1. **Tap the retrieve salary file link** on the app.
-2. 
-3. The file will open in Safari.  
-4. Tap the **Share** button (the square with an arrow pointing up).  
-5. Choose **Save to Files**, pick a folder (like *On My iPhone* or *iCloud Drive*), then tap **Save**.  
-6. Open the **Files** app, find your file:  
-   - If the file name does **not** end with `.csv`, **rename it**:  
-     - Long-press the file → Tap **Rename** → Add `.csv` to the end (example: `data.csv`).  
+<img width="207" height="448" alt="IMG_screenshot" src="https://github.com/user-attachments/assets/c3ec29ca-9e23-4308-8444-9879a67a8677" />
+
+
+2. Select your **classic** or **full roster** contest
+<img width="207" height="448" alt="IMG_9381" src="https://github.com/user-attachments/assets/eb56e07e-e24f-448f-a014-137d59a63de6" />
+<img width="207" height="448" alt="IMG_9382" src="https://github.com/user-attachments/assets/15a191c7-27c7-4220-bd90-a150bb0dee56" />
+<img width="207" height="448" alt="IMG_9372" src="https://github.com/user-attachments/assets/708bfa9f-f953-48aa-b747-ec5e9cd6ae34" />
+<img width="207" height="448" alt="IMG_9373" src="https://github.com/user-attachments/assets/7276cfe8-e463-409b-8f6a-7f85b09a2c4d" />
+
+
+3. **Export** the player list
+   - **IMPORTANT: For Draftkings - You may need to turn your phone to landscape to see the Export to CSV option**
+<img width="448" height="207" alt="IMG_9383" src="https://github.com/user-attachments/assets/8f347657-753d-4dc5-b239-e88fbe85b12b" />
+<img width="207" height="448" alt="IMG_9374" src="https://github.com/user-attachments/assets/de166328-adc1-4931-bbd4-77f3f9ed9c98" />
+
+
+4. **Save** the .CSV to your files
+<img width="207" height="448" alt="IMG_9375" src="https://github.com/user-attachments/assets/64276690-dde8-454a-aeb6-0149fda4011d" />
+<img width="448" height="207" alt="IMG_9385" src="https://github.com/user-attachments/assets/d42d0654-e872-4967-a663-af575c3c5268" />
+
+
+5. **Upload** your file (it should appear in your recents)
+<img width="207" height="448" alt="IMG_9388 - Copy" src="https://github.com/user-attachments/assets/1a9b5b93-9ff7-4c3d-934c-11f7ac782a4f" />
+<img width="207" height="448" alt="IMG_9387" src="https://github.com/user-attachments/assets/dcfb2055-5ae1-4a36-959d-87bda0c83861" />
+
+
+6. **Run** the optimizer
+<img width="207" height="448" alt="IMG_9388" src="https://github.com/user-attachments/assets/bcc23ad1-a88c-4b4c-8a58-ed248fe79ea1" />
+<img width="207" height="448" alt="IMG_9389" src="https://github.com/user-attachments/assets/6459cf26-4236-454f-b311-0bb8918fcf26" />
 
 
 ---
@@ -104,21 +127,8 @@ Follow these quick steps to download a file and make sure it's ready to upload a
 3. Open the **Files** (or **My Files**) app.  
 4. Find your file:  
    - If the file name does **not** end with `.csv`, **rename it**:  
-     - Tap the **3-dot menu** → **Rename** → Add `.csv` to the end (example: `data.csv`).  
-
-
----
-
-
-✅ Your file is now a proper `.csv` file and ready to upload.  
-You can open it anytime in **Google Sheets**, **Excel Mobile**, or any spreadsheet app on your phone.
-
-
-
-
-
-
-
+     - Tap the **3-dot menu** → **Rename** → Add `.csv` to the end (example: `data.csv`).
+5. **Follow steps 5 and 6** in the iPhone instructions above
 
 
 ---
@@ -175,6 +185,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
