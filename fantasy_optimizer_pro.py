@@ -292,6 +292,15 @@ if st.session_state.optimizer_started and salary_file:
     st.subheader("Top 20 Players")
     st.dataframe(final[['name','pos','salary','projection','multiplier']].sort_values('projection',ascending=False).head(20))
 
+    # New: Lock/Exclude Sidebar Controls
+    lock_players = st.sidebar.multiselect("Lock players (force into every lineup)",final['name'].tolist())
+    exclude_players = st.sidebar.multiselect("Exclude players (remove from pool)",final['name'].tolist())
+
+    if lock_players:
+        st.info(f"Locked players: {', '.join(lock_players)}")
+    if exclude_players:
+        st.warning(f"Excluded players: {', '.join(exclude_players)}")
+
 
     if 'DST' not in final['pos'].values: st.error("No DST found."); st.stop()
 
@@ -300,6 +309,12 @@ if st.session_state.optimizer_started and salary_file:
     def build(prev):
         prob=LpProblem("DFS",LpMaximize)
         vars_={i:LpVariable(f"p_{i}",cat='Binary') for i in pool}
+        # Lock / Exclude constraints
+        for idx in pool:
+            if final.loc[idx, 'name'] in lock_players:
+                prob+= vars_[idx] == 1
+            if final.loc[idx, 'name'] in exclude_players:
+                prob+= vars_[idx] == 0
         prob+=lpSum(vars_[i]*final.loc[i,'final_score'] for i in pool)
         prob+=lpSum(vars_[i]*final.loc[i,'salary'] for i in pool)<=salary_cap
         prob+=lpSum(vars_[i] for i in pool if final.loc[i,'pos']=="QB")==1
@@ -342,8 +357,5 @@ if st.session_state.optimizer_started and salary_file:
 
 st.write("---")
 st.markdown("Need help? Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer) for instructions, the latest updates, or to contribute!")
-
-
-
 
 
