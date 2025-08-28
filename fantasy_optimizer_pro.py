@@ -138,7 +138,11 @@ def calc_multiplier(row, spread_trigger, total_trigger, impact_pct):
 # ------------------------------
 # Streamlit UI
 # ------------------------------
-st.title("🏈 DFS Optimizer Pro")
+st.title("🏈 DFS Fantasy Football Optimizer Pro")
+
+st.write("---")
+st.markdown(["Retrieve DraftKings Salary File 🏆](https://www.draftkings.com/home/contestlistbysport?sport=NFL")
+st.markdown(["Retrieve FanDuel Salary File 🏆](https://www.fanduel.com/contests/nfl/5387")
 
 
 num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3,help="How many lineups should the optimizer build?")
@@ -338,4 +342,5 @@ if st.session_state.optimizer_started and salary_file:
 
 st.write("---")
 st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer) for the latest updates or to contribute!")
+
 
