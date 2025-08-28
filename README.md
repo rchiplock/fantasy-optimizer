@@ -71,6 +71,58 @@ Free at [The Odds API](https://the-odds-api.com/).
 
 ---
 
+## 📥 How to Download and Save a CSV on Your Phone
+
+
+Follow these quick steps to download a file and make sure it's ready to upload as a **CSV** on your mobile device:
+
+
+---
+
+
+### ✅ For iPhone (Safari)
+
+
+1. **Tap the retrieve salary file link** on the app.
+2. 
+3. The file will open in Safari.  
+4. Tap the **Share** button (the square with an arrow pointing up).  
+5. Choose **Save to Files**, pick a folder (like *On My iPhone* or *iCloud Drive*), then tap **Save**.  
+6. Open the **Files** app, find your file:  
+   - If the file name does **not** end with `.csv`, **rename it**:  
+     - Long-press the file → Tap **Rename** → Add `.csv` to the end (example: `data.csv`).  
+
+
+---
+
+
+### ✅ For Android (Chrome)
+
+
+1. **Tap the download link** on the website.  
+2. The file will download to your **Downloads** folder.  
+3. Open the **Files** (or **My Files**) app.  
+4. Find your file:  
+   - If the file name does **not** end with `.csv`, **rename it**:  
+     - Tap the **3-dot menu** → **Rename** → Add `.csv` to the end (example: `data.csv`).  
+
+
+---
+
+
+✅ Your file is now a proper `.csv` file and ready to upload.  
+You can open it anytime in **Google Sheets**, **Excel Mobile**, or any spreadsheet app on your phone.
+
+
+
+
+
+
+
+
+
+---
+
 
 ## ✅ Features at a Glance
 ✔ **DraftKings & FanDuel support**  
@@ -123,6 +175,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
