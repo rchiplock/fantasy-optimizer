@@ -153,14 +153,38 @@ Follow these quick steps to download a file and make sure it's ready to upload a
 ## ✅ Features at a Glance
 ✔ **DraftKings & FanDuel support**  
 ✔ **FantasyPros Projections** (built-in, always up-to-date)  
-✔ **Vegas-adjusted scoring** with user controls:
-- *Spread Trigger* = when favorites/underdogs matter  
-- *Over/Under Trigger* = identify shootouts  
-- *Vegas Impact %* = control how much Vegas changes projections  
 ✔ Interactive optimizer settings:
-- Minimum projection filter  
-- Randomness for GPP variance  
-- QB-WR stack option  
+- *QB-WR stack option*:
+   - Classic fantasy football strategy
+- *Scoring Optimization*:
+   - Adjust point projections for low risk (Floor), high risk (Ceiling), or play it safe (Median)
+- *Randomness for GPP variance*:
+   - Add randomness for Guaranteed Prize Pool Contests
+   - More randomness = more unique lineups 
+- *Minimum projection filter*:
+   - Ignore players below this point projection
+     
+✔ **Vegas-adjusted scoring** with user controls (Vegas lines tell us the expected game scripts):
+   - **Big Favorites ➡️ Run the ball more ➡️ RB boost**
+   - **Big Underdogs ➡️ Throw often ➡️ WR/TE boost**
+   - **High Total Games ➡️ Shootouts ➡️ more upside for pass-catchers, less for DST**
+
+- *Spread Trigger (points)*: 
+   - When a team is favored (or a big underdog) by at least **this many points**, we start adjusting projections.
+   - **Favored big?** Great spot for RBs (more rush attempts when leading)
+   - **Big underdog?** Extra love for WRs/TEs (more passing when trailing - garbage time points!)  
+- *Over/Under Trigger (points)*: 
+   - If a game's **total points line** is **above this number**, we boost receiving options (more scoring expected)
+   - **High total = Shootout alert!** WRs & TEs shine
+   - **Low total = Defensive battle.** DST gets a little bump
+- *Vegas Impact (%)*:
+   - Decide how much the betting market moves the needle on player projections
+   - **0% = Pure projections only.** ignore the line
+   - **10% = Small edge from Vegas baked in**
+   - **20% = Heavy lean on Vegas signals.** Trust the market like a sharp
+
+ 
+  
 - Multi-lineup builder  
 ✔ Fuzzy player name matching + manual corrections  
 ✔ Download optimized lineups as CSV  
@@ -201,6 +225,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
