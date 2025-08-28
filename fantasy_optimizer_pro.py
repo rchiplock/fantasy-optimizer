@@ -5,7 +5,6 @@ import requests
 import re
 from thefuzz import process
 from pulp import LpProblem, LpMaximize, LpVariable, lpSum, PULP_CBC_CMD
-from yahoo_data import get_weekly_raw_stats
 
 
 # ------------------------------
@@ -40,14 +39,6 @@ def normalize_name(name):
     return re.sub(r'[^a-z]', '', str(name).lower())
 
 
-def compute_projection(row, scoring):
-    total=sum(row.get(cat,0)*pts for cat,pts in scoring.items() if pd.notna(row.get(cat)))
-    if row.get('pass_yds',0)>=300: total+=3
-    if row.get('rush_yds',0)>=100: total+=3
-    if row.get('rec_yds',0)>=100: total+=3
-    return total
-
-
 def flatten_columns(df):
     if isinstance(df.columns, pd.MultiIndex):
         df.columns=['_'.join([str(c).strip().lower() for c in tup if c and 'unnamed' not in str(c).lower()]) for tup in df.columns]
@@ -62,7 +53,7 @@ def detect_fpts_column(df):
 
 
 # ------------------------------
-# FantasyPros fallback
+# Fetch projections from FantasyPros
 # ------------------------------
 def fetch_fantasypros_projections():
     positions=['qb','rb','wr','te']
@@ -78,7 +69,7 @@ def fetch_fantasypros_projections():
             if 'player' in df.columns: df.rename(columns={'player':'name'}, inplace=True)
             all_data.append(df)
         except Exception as e:
-            st.warning(f"FP scrape failed for {pos}: {e}")
+            st.warning(f"FantasyPros scrape failed for {pos}: {e}")
     skill=pd.concat(all_data,ignore_index=True) if all_data else pd.DataFrame()
     try:
         dst=pd.read_html(f"{base_url}dst.php")[0]
@@ -149,8 +140,7 @@ def calc_multiplier(row, spread_trigger, total_trigger, impact_pct):
 # ------------------------------
 st.title("🏈 DFS Optimizer Pro")
 
-league_id=st.sidebar.text_input("Yahoo League ID","1168764",help="Your Yahoo league number (from the URL). Needed for projections")
-week=st.sidebar.number_input("Week",1,18,1,help="Which NFL week to optimize for")
+
 num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3,help="How many lineups should the optimizer build?")
 api_key=st.sidebar.text_input("Odds API Key",value=DEFAULT_API_KEY,help="API key from The Odds API for game totals & spreads")
 min_uniqueness=st.sidebar.slider("Min unique players per lineup",1,5,1,help="Force variety: Each lineup must differ by this many players")
@@ -204,34 +194,25 @@ if st.session_state.optimizer_started and salary_file:
     salaries['name_norm']=salaries['name'].apply(normalize_name)
 
 
-    st.info("Fetching Yahoo projections…")
-    yahoo_df=get_weekly_raw_stats(league_id,week)
-    yahoo_df['name_norm']=yahoo_df['full_name'].apply(normalize_name)
-    scoring=DK_DEFAULTS if platform=='DraftKings' else FD_DEFAULTS
-    yahoo_df['projection']=yahoo_df.apply(lambda r:compute_projection(r,scoring),axis=1)
+    st.info("Fetching FantasyPros projections…")
+    projections_df=fetch_fantasypros_projections()
+    st.success("Using projections from FantasyPros")
 
 
-    using="Yahoo"
-    if yahoo_df.empty or yahoo_df['projection'].sum()==0:
-        st.warning("Yahoo projections empty → Using FantasyPros fallback.")
-        yahoo_df=fetch_fantasypros_projections()
-        using="FantasyPros"
-    st.success(f"Using projections: {using}")
-
-
+    # Fuzzy match names
     salaries['matched_name'] = None
-    names = list(yahoo_df['name_norm'])
+    names = list(projections_df['name_norm'])
     unmatched_rows = []
 
 
     for idx, row in salaries.iterrows():
         match, score = process.extractOne(row['name_norm'], names)
         if match and score >= FUZZY_THRESHOLD:
-            candidate = yahoo_df[yahoo_df['name_norm'] == match].iloc[0]
+            candidate = projections_df[projections_df['name_norm'] == match].iloc[0]
             if str(candidate['pos']).upper() == str(row['pos']).upper():
                 salaries.at[idx, 'matched_name'] = match
             else:
-                same_pos = yahoo_df[yahoo_df['pos'].str.upper() == str(row['pos']).upper()]
+                same_pos = projections_df[projections_df['pos'].str.upper() == str(row['pos']).upper()]
                 if not same_pos.empty:
                     alt_match, alt_score = process.extractOne(row['name_norm'], list(same_pos['name_norm']))
                     if alt_match and alt_score >= FUZZY_THRESHOLD:
@@ -244,10 +225,10 @@ if st.session_state.optimizer_started and salary_file:
             unmatched_rows.append(row)
 
 
-    merged = salaries.merge(yahoo_df, left_on='matched_name', right_on='name_norm', how='left')
+    merged = salaries.merge(projections_df, left_on='matched_name', right_on='name_norm', how='left')
 
 
-    # ✅ Interactive Mapping with Session Persistence
+    # ✅ Interactive Mapping
     if 'corrected_matches' not in st.session_state:
         st.session_state.corrected_matches = {}
 
@@ -255,14 +236,13 @@ if st.session_state.optimizer_started and salary_file:
     if unmatched_rows:
         st.warning(f"{len(unmatched_rows)} players could not be matched. Showing top 50 by salary. Please map those you'd like to include in projections below:")
         unmatched_df = pd.DataFrame(unmatched_rows)
-        # Sort by salary and keep only top 25
         unmatched_df['salary'] = pd.to_numeric(unmatched_df.get('salary',0),errors='coerce').fillna(0)
         unmatched_df = unmatched_df.sort_values(by='salary', ascending=False).head(50)
-        display_col = 'full_name' if 'full_name' in yahoo_df.columns else 'name'
+        display_col = 'name'
 
 
         for i, r in unmatched_df.iterrows():
-            candidates = yahoo_df[yahoo_df['pos'].str.upper() == str(r['pos']).upper()][display_col].dropna().tolist()
+            candidates = projections_df[projections_df['pos'].str.upper() == str(r['pos']).upper()][display_col].dropna().tolist()
             current_value = st.session_state.corrected_matches.get(r['name_norm'], "-- No Match --")
             selected = st.selectbox(
                 f"Match for {r['name']}",
@@ -281,7 +261,7 @@ if st.session_state.optimizer_started and salary_file:
                 salaries.at[idx, 'matched_name'] = st.session_state.corrected_matches[row['name_norm']]
 
 
-        merged = salaries.merge(yahoo_df, left_on='matched_name', right_on='name_norm', how='left')
+        merged = salaries.merge(projections_df, left_on='matched_name', right_on='name_norm', how='left')
 
 
     # ------------------- Continue -------------------
