@@ -1,134 +1,61 @@
 # 🏈 DFS Fantasy Football Optimizer
 
 
-This app helps you **build optimal lineups for DraftKings or FanDuel** using:
+Build **optimal DraftKings or FanDuel lineups** in seconds using:
 
-✔ **FantasyPros** weekly projections 
 
-✔ Vegas odds (game totals & spreads with dynamic control)  
-
-✔ Smart lineup constraints (**stacking, uniqueness**)
-
-✔ Live user-controlled Vegas impact sliders  
-
+✔ **FantasyPros projections**  
+✔ **Vegas odds (spreads & totals)** with dynamic control  
+✔ **Smart lineup constraints** (stacking, uniqueness, exposure)  
+✔ **Fully interactive web app – no install needed!**  
 
 
 ---
 
 
-## ✅ What You Need to Use This App
+## ✅ Try It Now (No Installation!)
+👉 **Launch the App:**  
+[**fantasy-optimizer-pro.streamlit.app**](https://fantasy-optimizer-pro.streamlit.app)
 
 
-1. **Python 3.9 or newer**
-   - Download from [python.org](https://www.python.org/downloads/)
-
-  
-
-2. **An Odds API Key**
-   - Sign up at [The Odds API](https://the-odds-api.com)
-   - Free tier = 500 calls/month (Plenty for personal use)
-  
-
-3. **DraftKings or FanDuel salary CSV**
+Runs entirely in the cloud. No setup. No coding.  
 
 
 ---
 
 
-## ✅ How to Set Up and Run Locally (Step-by-Step)
+## ✅ What You Need
+✅ **1. Odds API Key**  
+Free at [The Odds API](https://the-odds-api.com/).  
+- Get your API key (free tier = 500 calls/month – plenty for personal use).  
+
+
+✅ **2. Salary CSV from DraftKings or FanDuel**  
+- DraftKings: Download from the contest page "Player List" link  
+- FanDuel: Download from the contest lobby  
+**File must include the source in the name (e.g., `draftkings-week1.csv` or `fanduel-week1.csv`)**  
 
 
 ---
 
 
-### **Step 1: Get the App Files**
-1. Go to [THIS GitHub Repo](https://github.com/rchiplock/fantasy-optimizer).
-2. Click the green **“Code”** button → choose **Download ZIP**.
-3. Extract the ZIP to a folder (example: `Desktop/fantasy-optimizer`).
-
-
----
-
-
-### **Step 2: Open a Terminal (Command Prompt on Windows)**
-- Navigate to the app folder:
-```
-cd Desktop/fantasy-optimizer
-```
-
-
----
-
-
-### **Step 3: Install Requirements**
-Run:
-```
-pip install -r requirements.txt
-```
-
-
----
-
-
-### **Step 4: Set Up Yahoo Authentication**
-1. The first time you run the app locally, it will create a file called `oauth2.json`.
-2. To create this file:
-   - Run the app (Step 6 below).
-   - The app will show a Yahoo login link in your console.
-   - **Click the link** → sign in → copy the code → paste it in the console.
-3. Done! Your Yahoo credentials are now stored **locally** (safe on your computer).
-
-
----
-
-
-### **Step 5: Get Your Odds API Key**
-- From [The Odds API](https://the-odds-api.com), copy your **API key**.
-
-
----
-
-
-### **Step 6: Run the App**
-Run this command:
-```
-streamlit run fantasy_optimizer_pro.py
-```
-If that **doesn't work** (you see "'streamlit is not recognized"), use:
-```
-python -m streamlit run fantasy_optimizer_pro.py
-```
-
-✔ This will open the app in your browser at:
-```
-http://localhost:8501
-```
-
-
----
-
-
-### **Step 7: Use the App**
-- Enter your Yahoo League ID (from your league URL, e.g., `1168764`).
-- Enter your Odds API key.
-- Upload your **salaries CSV** from DraftKings or FanDuel (See Below).
-- Click **Run Optimizer** → Download your optimal lineups! 🎉
-
-
----
-
-
-## ✅ Notes
-- **Offseason?** Yahoo projections will show **0** (that’s normal).
-- Your Yahoo tokens auto-refresh; no need to log in again unless they expire.
-- All data stays **on your machine**; nothing is uploaded to a server.
+## ✅ How to Use the App
+1. **Open the app** → [fantasy-optimizer-pro.streamlit.app](https://fantasy-optimizer-pro.streamlit.app)  
+2. **Upload your salary file** (DraftKings or FanDuel)  
+3. **Enter your Odds API key** (from The Odds API)  
+4. Adjust **Vegas impact sliders** & options (uniqueness, stacking, etc.)  
+5. Click **Run Optimizer** → Download your lineups! 🎉  
 
 
 ---
 
 
 ## ✅ Retrieving Salary Files
-- Login to your Draftkings or FanDuel account
+- Login to your Draftkings or FanDuel account **on a browser** (cannot download player lists in the apps)
+
+[🏆 DraftKings](https://www.draftkings.com/home/contestlistbysport?sport=NFL)
+
+[🏆 FanDuel](https://www.fanduel.com/contests/nfl/5387)
 - Select a **Classic** (Draftkings) or **Full Roster** (FanDuel) NFL contest
 - Click on **Draft Team** (Draftkings) or **Enter new lineup** (FanDuel)
 - Click the link to download the player list (salary file):
@@ -136,7 +63,7 @@ http://localhost:8501
   <img width="2525" height="1521" alt="Draftkings Salary File Download" src="https://github.com/user-attachments/assets/4a326409-920b-4744-9631-443e2775d654" />
 - FanDuel:
   <img width="3550" height="1555" alt="FanDuel Salary File Download" src="https://github.com/user-attachments/assets/8776ddbd-0447-4ab7-883d-c79b6d4c2982" />
-- Save the file as a .CSV file with the source name included
+- Save the file as a .CSV file with the source name included (iOS users can convert the file via the **Numbers** app)
 -    **Draftkings example**: draftkings week 1 salary.csv (must have 'draftkings' or 'dk' in file name to detect correct salary constraints)
 -    **FanDuel example**: fanduel week 1 salary.csv
 - These are now ready to upload into the app.
@@ -145,48 +72,35 @@ http://localhost:8501
 ---
 
 
-## ✅ Troubleshooting
-- ❌ **`st.secrets has no key oauth`**  
-  → Ignore this error locally. It only applies to cloud deployment.
-- ❌ **App hanging or slow**  
-  → First run may take 15–30 seconds to fetch projections (Yahoo API).
-- ❌ **No DST in player pool**  
-  → Ensure you uploaded the correct salary file for NFL.
-
-
----
-
-
 ## ✅ Features at a Glance
-✔ Supports DraftKings & FanDuel salary files 
-
-✔ Yahoo or FantasyPros (fallback) Projections 
-
-✔ Advanced Vegas logic for projected game flow (boost favorite RB / underdog pass catchers in blowouts, downgrade DST in shootouts) 
-- **Spread Trigger (pts)**: When does game script start to matter? Set the point spread size (favorite vs underdog) where adjustments kick in. **Example**: At 7 pts, favored RBs gain an edge; underdog WR/TEs see more volume
-
-- **Over/Under Trigger**: Games above this Over/Under threshold are considered shootouts and would boost WR/TE while slightly downgrading a DST. **Example**: At 47, WR/TE get a bump in high-scoring games; DST would get a small reduction
-
-- **Vegas Impact Intensity (%)**: How much weight do Vegas odds add to player projections? 0% = ignore Vegas, 20% = strong game-script adjustments for spreads/totals
-
-✔ Lineup constraints:  
-- Min uniqueness  
-- Optional QB-WR stacking  
+✔ **DraftKings & FanDuel support**  
+✔ **FantasyPros Projections** (built-in, always up-to-date)  
+✔ **Vegas-adjusted scoring** with user controls:
+- *Spread Trigger* = when favorites/underdogs matter  
+- *Over/Under Trigger* = identify shootouts  
+- *Vegas Impact %* = control how much Vegas changes projections  
+✔ Interactive optimizer settings:
+- Minimum projection filter  
+- Randomness for GPP variance  
+- QB-WR stack option  
+- Multi-lineup builder  
+✔ Fuzzy player name matching + manual corrections  
+✔ Download optimized lineups as CSV  
 
 
 ---
 
 
-✅ That’s it! No code editing, just follow these instructions:
-- Download → Install → Login → Run → Optimize ✅
+## ✅ Notes
+- No login, OAuth, or local install required  
+- Runs live in your browser on Streamlit Cloud  
+- Odds API key is **free** for casual use  
 
 
 ---
 
 
 ## 💸 Support This Project
-
-
 This app is 100% free and open source, built for fun to help optimize your DFS lineups.  
 If it helped you build better lineups (or even hit a big win 🏆), consider supporting the project!
 
@@ -209,6 +123,19 @@ Check the latest version and details here:
 
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
