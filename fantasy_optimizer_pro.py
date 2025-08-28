@@ -143,7 +143,7 @@ st.title("🏈 DFS Fantasy Football Optimizer Pro")
 st.write("---")
 st.markdown("Retrieve [DraftKings](https://www.draftkings.com/home/contestlistbysport?sport=NFL) Salary File 🏆")
 st.markdown("Retrieve [FanDuel](https://www.fanduel.com/contests/nfl/5387) Salary File 🏆")
-
+st.write("---")
 
 num_lineups=st.sidebar.number_input("Number of Lineups",1,20,3,help="How many lineups should the optimizer build?")
 api_key=st.sidebar.text_input("Odds API Key",value=DEFAULT_API_KEY,help="API key from The Odds API for game totals & spreads")
@@ -341,7 +341,8 @@ if st.session_state.optimizer_started and salary_file:
 
 
 st.write("---")
-st.markdown("Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer) for the latest updates or to contribute!")
+st.markdown("Need help? Enjoying the App? [Visit GitHub](https://github.com/rchiplock/fantasy-optimizer) for instructions, the latest updates, or to contribute!")
+
 
 
 
