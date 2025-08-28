@@ -179,8 +179,17 @@ if salary_file and not st.session_state.optimizer_started:
 if st.session_state.optimizer_started and salary_file:
     filename=salary_file.name.lower()
     platform='DraftKings' if 'draftkings' in filename or 'dk' in filename else 'FanDuel'
-    salary_cap=50000 if platform=='DraftKings' else 60000
-    st.write(f"✅ Platform: {platform} | Cap: {salary_cap}")
+    default_salary_cap=50000 if platform=='DraftKings' else 60000
+    # New slider for adjusting salary cap
+    salary_cap = st.sidebar.slider(
+        "Max Salary to Use",
+        min_value=int(default_salary_cap * 0.8), # allow 80% min spend
+        max_value=default_salary_cap,
+        value=default_salary_cap,
+        step=500,
+        help="Lower this to leave some salary on the table for GPP-type lineups"
+    )
+    st.write(f"✅ Platform: {platform} | Original Cap: {default_salary_cap} | Using: {salary_cap}")
 
 
     salaries=pd.read_csv(salary_file)
