@@ -3,7 +3,7 @@
 
 This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 
-✔ Yahoo Fantasy Projections with fallback to **FantasyPros** 
+✔ **FantasyPros** weekly projections 
 
 ✔ Vegas odds (game totals & spreads with dynamic control)  
 
@@ -22,17 +22,14 @@ This app helps you **build optimal lineups for DraftKings or FanDuel** using:
 1. **Python 3.9 or newer**
    - Download from [python.org](https://www.python.org/downloads/)
 
-
-2. **A Yahoo account** (for projections)
-   - Create/login at [Yahoo Fantasy](https://sports.yahoo.com/fantasy/)
   
 
-3. **An Odds API Key**
+2. **An Odds API Key**
    - Sign up at [The Odds API](https://the-odds-api.com)
    - Free tier = 500 calls/month (Plenty for personal use)
   
 
-4. **DraftKings or FanDuel salary CSV**
+3. **DraftKings or FanDuel salary CSV**
 
 
 ---
@@ -212,6 +209,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
