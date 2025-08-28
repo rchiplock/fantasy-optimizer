@@ -43,9 +43,25 @@ Free at [The Odds API](https://the-odds-api.com/).
 ## ✅ How to Use the App
 1. **Open the app** → [fantasy-optimizer-pro.streamlit.app](https://fantasy-optimizer-pro.streamlit.app)  
 2. **Upload your salary file** (DraftKings or FanDuel)  
-3. **Enter your Odds API key** (from The Odds API)  
-4. Adjust **Vegas impact sliders** & options (uniqueness, stacking, etc.)  
-5. Click **Run Optimizer** → Download your lineups! 🎉  
+3. **Enter your Odds API key** (from The Odds API)
+- App can still run without and Odds API key but will not return any Vegas odds adjustments
+5. Adjust **Vegas impact sliders** & options (uniqueness, stacking, etc.)  
+6. Click **Run Optimizer** → Download your lineups! 🎉  
+
+## ↔️ Player Matching
+Player names **don't always match** between FantasyPros and DraftKings / Fanduel
+
+- Example: CJ Stroud - C.J. Stroud
+
+The app organizes unmatched players by **highest salary (most relevant)** and shows the top 50
+
+Click the dropdown for any player you'd like to match and begin typing their name
+
+Select the entry that matches the player you are trying to match up
+
+Once you select the matching entry, that player is automatically added to the player pool and lineups are updated with that player available
+
+If you don't want to match anyone, just scroll down to the bottom to retrieve your lineups 🏆
 
 
 ---
@@ -185,6 +201,7 @@ Check the latest version and details here:
 
 
 ---
+
 
 
 
